@@ -1,5 +1,7 @@
 package org.iesalandalus.ChatDAM.javafx;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,7 +9,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.iesalandalus.ChatDAM.chat.cliente.AuthClienteService;
+import org.iesalandalus.ChatDAM.chat.cliente.ChatControlador;
 import org.iesalandalus.ChatDAM.chat.dto.LoginResponse;
+
+import java.io.IOException;
 
 public class LoginVentana {
 
@@ -49,9 +54,25 @@ public class LoginVentana {
                 javafx.application.Platform.runLater(() -> {
                     btnLogin.setDisable(false);
                     if (respuesta != null && respuesta.isExito()) {
-                        // Login correcto → abrir ventana principal
-                        ChatVentana chatVentana = new ChatVentana(respuesta.getNombreUsuario());
-                        chatVentana.mostrar(stage);
+
+                        // Login correcto → cargamos la vista FXML directamente
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista_chat.fxml"));
+                            Parent root = loader.load();
+
+                            // Pasamos el nombre del login al controlador directamente
+                            ChatControlador controlador = loader.getController();
+                            controlador.setNombreUsuario(respuesta.getNombreUsuario());
+
+                            stage.setTitle("ChatDAM - " + respuesta.getNombreUsuario());
+                            stage.setScene(new Scene(root));
+                            stage.show();
+
+                        } catch (IOException ex) {
+                            lblError.setText("Error al cargar la vista del chat.");
+                            ex.printStackTrace();
+                        }
+
                     } else {
                         // Login incorrecto → ventana de error
                         String motivo = (respuesta != null) ? respuesta.getMensaje() : "Sin conexión con el servidor";
