@@ -18,21 +18,21 @@ public class AuthService {
 
     public LoginResponse validarLogin(LoginRequest request) {
         try {
-            // 1. Descifrar credenciales recibidas de JavaFX
+            // Descifrar credenciales recibidas de JavaFX
             String nombreUsuario = CifradoUtil.descifrar(request.getNombreUsuarioCifrado());
             String password      = CifradoUtil.descifrar(request.getPasswordCifrado());
 
-            // 2. Nunca logueamos contraseñas
+            // Nunca logueamos contraseñas
             System.out.println("Intento de login para usuario: " + nombreUsuario);
 
-            // 3. Buscar usuario en BD
+            // Buscar usuario en BD
             Optional<Usuario> usuarioOpt = usuarioRepository.findByNombreUsuario(nombreUsuario);
 
             if (usuarioOpt.isEmpty()) {
                 return new LoginResponse(false, "Usuario no encontrado", null);
             }
 
-            // 4. Comparar hash SHA-256 de la contraseña recibida con el hash almacenado
+            // Comparar hash SHA-256 de la contraseña recibida con el hash almacenado
             String hashRecibido = CifradoUtil.hashSHA256(password);
             Usuario usuario = usuarioOpt.get();
 

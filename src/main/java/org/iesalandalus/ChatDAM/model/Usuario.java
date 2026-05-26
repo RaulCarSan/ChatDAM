@@ -13,7 +13,7 @@ public class Usuario {
     @Column(name = "nombre_usuario", nullable = false, unique = true)
     private String nombreUsuario;
 
-    // Se almacena el hash SHA-256 de la contraseña, NO en texto plano
+    // Se almacena el hash SHA-256 de la contraseña
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
