@@ -5,6 +5,8 @@ public class LoginResponse {
     private String mensaje;
     private String nombreUsuario; // Solo se devuelve si el login fue exitoso
 
+    public LoginResponse() {}
+
     public LoginResponse(boolean exito, String mensaje, String nombreUsuario) {
         this.exito = exito;
         this.mensaje = mensaje;
