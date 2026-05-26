@@ -10,9 +10,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="450.0" stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.iesalandalus.ChatDAM.chat.cliente.ChatControlador">
+<BorderPane prefHeight="600.0" prefWidth="450.0" stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.iesalandalus.ChatDAM.chat.controller.ChatControlador">
 
     <top>
         <VBox>
@@ -25,8 +26,18 @@
                     </Menu>
                 </menus>
             </MenuBar>
+
             <HBox alignment="CENTER" prefHeight="50.0" styleClass="cabecera-chat">
-                <Label styleClass="titulo-cabecera" text="Chat Corporativo AWS" />
+                <padding>
+                    <Insets left="15.0" right="15.0" />
+                </padding>
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Label styleClass="titulo-cabecera" text="Chat" />
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Button fx:id="btnApagar" onAction="#salirAplicacion" styleClass="boton-apagar" text="✕" />
             </HBox>
         </VBox>
     </top>

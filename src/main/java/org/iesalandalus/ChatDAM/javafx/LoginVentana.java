@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.iesalandalus.ChatDAM.chat.cliente.AuthClienteService;
-import org.iesalandalus.ChatDAM.chat.cliente.ChatControlador;
+import org.iesalandalus.ChatDAM.chat.controller.ChatControlador;
 import org.iesalandalus.ChatDAM.chat.dto.LoginResponse;
 
 import java.io.IOException;

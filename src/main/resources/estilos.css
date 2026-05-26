@@ -65,3 +65,20 @@
     -fx-font-size: 10px;
     -fx-text-fill: #999999;
 }
+
+.boton-apagar {
+    -fx-background-color: #ff4c4c; /* Rojo brillante */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50em; /* Esto lo hace completamente redondo */
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-max-width: 35px;
+    -fx-max-height: 35px;
+    -fx-cursor: hand;
+}
+
+.boton-apagar:hover {
+    -fx-background-color: #cc0000; /* Rojo más oscuro al pasar el ratón */
+}

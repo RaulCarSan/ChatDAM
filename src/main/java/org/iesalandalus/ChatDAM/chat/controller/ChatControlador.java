@@ -1,4 +1,4 @@
-package org.iesalandalus.ChatDAM.chat.cliente;
+package org.iesalandalus.ChatDAM.chat.controller;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import org.iesalandalus.ChatDAM.chat.cliente.ChatClienteService;
 import org.iesalandalus.ChatDAM.model.Mensaje;
 
 import java.time.LocalDate;
@@ -33,46 +34,28 @@ public class ChatControlador {
 
     @FXML
     public void initialize() {
+        // 1. Solo preparamos el servicio y el scroll visual. ¡Nada de cargar mensajes todavía!
         clienteService = new ChatClienteService();
-
-        pedirNombreUsuario();
-
-        actualizarMensajes();
-
-        actualizadorAutomatico = new Timeline(new KeyFrame(Duration.seconds(3), evento -> {
-            actualizarMensajes();
-        }));
-        actualizadorAutomatico.setCycleCount(Animation.INDEFINITE);
-        actualizadorAutomatico.play();
 
         vboxMensajes.heightProperty().addListener((observable, oldVal, newVal) -> {
             scrollMensajes.setVvalue(1.0);
         });
     }
 
-    // Nuevo método para inyectar el nombre desde el Login
+    // 2. Este método lo llama LoginVentana. Aquí es donde REALMENTE arranca el chat.
     public void setNombreUsuario(String nombre) {
         this.miNombreUsuario = nombre;
-    }
+        System.out.println("Usuario conectado desde Login: " + miNombreUsuario);
 
-    private void pedirNombreUsuario() {
-        // Si ya vino del login, no volvemos a preguntar
-        if (miNombreUsuario != null && !miNombreUsuario.isBlank()) {
-            return;
-        }
+        // AHORA que ya sabemos quién eres, cargamos los mensajes
+        actualizarMensajes();
 
-        // Fallback por si se abre sin pasar por login (útil en desarrollo)
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Identificación");
-        dialog.setHeaderText("¡Bienvenido al Chat Corporativo!");
-        dialog.setContentText("Por favor, introduce tu nombre:");
-
-        Optional<String> resultado = dialog.showAndWait();
-        if (resultado.isPresent() && !resultado.get().trim().isEmpty()) {
-            miNombreUsuario = resultado.get().trim();
-        } else {
-            miNombreUsuario = "Usuario Anonimo"; // Por si le da a cancelar
-        }
+        // AHORA encendemos el temporizador
+        actualizadorAutomatico = new Timeline(new KeyFrame(Duration.seconds(3), evento -> {
+            actualizarMensajes();
+        }));
+        actualizadorAutomatico.setCycleCount(Animation.INDEFINITE);
+        actualizadorAutomatico.play();
     }
 
     private void actualizarMensajes() {
@@ -105,7 +88,8 @@ public class ChatControlador {
 
         HBox alineacion = new HBox();
 
-        if (mensaje.getNombreUsuario().equalsIgnoreCase(miNombreUsuario)) {
+        // Validamos que miNombreUsuario no sea nulo por seguridad
+        if (miNombreUsuario != null && mensaje.getNombreUsuario().equalsIgnoreCase(miNombreUsuario)) {
             burbuja.getStyleClass().add("burbuja-mia");
             alineacion.setAlignment(Pos.CENTER_RIGHT);
         } else {
@@ -121,7 +105,7 @@ public class ChatControlador {
     void enviarMensaje(ActionEvent event) {
         String texto = txtInputMensaje.getText();
 
-        if (texto != null && !texto.trim().isEmpty()) {
+        if (texto != null && !texto.trim().isEmpty() && miNombreUsuario != null) {
             String horaActual = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
             LocalDate fechaActual = LocalDate.now();
 
