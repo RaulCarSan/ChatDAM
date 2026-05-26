@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.iesalandalus.ChatDAM.chat.cliente.AuthClienteService;
@@ -19,7 +20,9 @@ public class LoginVentana {
     public void mostrar(Stage stage) {
         stage.setTitle("ChatDAM - Iniciar sesión");
 
-        Label lblTitulo    = new Label("ChatDAM - Login Corporativo");
+        Label lblTitulo   = new Label("ChatDAM - Login Corporativo");
+        lblTitulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
         Label lblUsuario   = new Label("Usuario:");
         TextField tfUsuario = new TextField();
         tfUsuario.setPromptText("Introduce tu usuario");
@@ -31,9 +34,28 @@ public class LoginVentana {
         Label lblError = new Label();
         lblError.setStyle("-fx-text-fill: red;");
 
+        // --- Botón principal: Entrar ---
         Button btnLogin = new Button("Entrar");
-        btnLogin.setDefaultButton(true); // responde a Enter
+        btnLogin.setDefaultButton(true);
+        btnLogin.setMaxWidth(Double.MAX_VALUE);
+        btnLogin.setStyle(
+                "-fx-background-color: #128C7E; -fx-text-fill: white; " +
+                        "-fx-font-weight: bold; -fx-background-radius: 5px;"
+        );
 
+        // --- Botón secundario: Registrarse ---
+        Button btnRegistro = new Button("¿No tienes cuenta? Regístrate");
+        btnRegistro.setMaxWidth(Double.MAX_VALUE);
+        btnRegistro.setStyle(
+                "-fx-background-color: transparent; -fx-text-fill: #128C7E; " +
+                        "-fx-border-color: #128C7E; -fx-border-radius: 5px; -fx-background-radius: 5px;"
+        );
+        btnRegistro.setOnAction(e -> {
+            RegistroVentana ventanaRegistro = new RegistroVentana();
+            ventanaRegistro.mostrar(stage);
+        });
+
+        // --- Acción del botón Entrar ---
         btnLogin.setOnAction(e -> {
             String usuario  = tfUsuario.getText().trim();
             String password = pfPassword.getText();
@@ -44,23 +66,24 @@ public class LoginVentana {
             }
 
             btnLogin.setDisable(true);
+            btnRegistro.setDisable(true);
             lblError.setText("Validando...");
+            lblError.setStyle("-fx-text-fill: #128C7E;");
 
-            // Llamada en hilo separado para no bloquear la UI de JavaFX
             new Thread(() -> {
                 AuthClienteService authService = new AuthClienteService();
                 LoginResponse respuesta = authService.login(usuario, password);
 
                 javafx.application.Platform.runLater(() -> {
                     btnLogin.setDisable(false);
-                    if (respuesta != null && respuesta.isExito()) {
+                    btnRegistro.setDisable(false);
+                    lblError.setStyle("-fx-text-fill: red;");
 
-                        // Login correcto → cargamos la vista FXML directamente
+                    if (respuesta != null && respuesta.isExito()) {
                         try {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista_chat.fxml"));
                             Parent root = loader.load();
 
-                            // Pasamos el nombre del login al controlador directamente
                             ChatControlador controlador = loader.getController();
                             controlador.setNombreUsuario(respuesta.getNombreUsuario());
 
@@ -74,8 +97,9 @@ public class LoginVentana {
                         }
 
                     } else {
-                        // Login incorrecto → ventana de error
-                        String motivo = (respuesta != null) ? respuesta.getMensaje() : "Sin conexión con el servidor";
+                        String motivo = (respuesta != null)
+                                ? respuesta.getMensaje()
+                                : "Sin conexión con el servidor";
                         ErrorVentana errorVentana = new ErrorVentana(motivo);
                         errorVentana.mostrar();
                     }
@@ -83,13 +107,24 @@ public class LoginVentana {
             }).start();
         });
 
-        VBox layout = new VBox(10, lblTitulo, lblUsuario, tfUsuario,
-                lblPassword, pfPassword, lblError, btnLogin);
-        layout.setPadding(new Insets(20));
+        // --- Separador visual entre los dos botones ---
+        Separator separador = new Separator();
+        separador.setStyle("-fx-padding: 4 0 0 0;");
+
+        VBox layout = new VBox(10,
+                lblTitulo,
+                lblUsuario, tfUsuario,
+                lblPassword, pfPassword,
+                lblError,
+                btnLogin,
+                separador,
+                btnRegistro
+        );
+        layout.setPadding(new Insets(24));
         layout.setAlignment(Pos.CENTER);
         layout.setMinWidth(300);
 
-        stage.setScene(new Scene(layout, 350, 280));
+        stage.setScene(new Scene(layout, 360, 340));
         stage.setResizable(false);
         stage.show();
     }

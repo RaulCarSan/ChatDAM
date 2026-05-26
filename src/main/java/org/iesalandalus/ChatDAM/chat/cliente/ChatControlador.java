@@ -35,7 +35,6 @@ public class ChatControlador {
     public void initialize() {
         clienteService = new ChatClienteService();
 
-        pedirNombreUsuario();
 
         actualizarMensajes();
 
@@ -55,25 +54,6 @@ public class ChatControlador {
         this.miNombreUsuario = nombre;
     }
 
-    private void pedirNombreUsuario() {
-        // Si ya vino del login, no volvemos a preguntar
-        if (miNombreUsuario != null && !miNombreUsuario.isBlank()) {
-            return;
-        }
-
-        // Fallback por si se abre sin pasar por login (útil en desarrollo)
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Identificación");
-        dialog.setHeaderText("¡Bienvenido al Chat Corporativo!");
-        dialog.setContentText("Por favor, introduce tu nombre:");
-
-        Optional<String> resultado = dialog.showAndWait();
-        if (resultado.isPresent() && !resultado.get().trim().isEmpty()) {
-            miNombreUsuario = resultado.get().trim();
-        } else {
-            miNombreUsuario = "Usuario Anonimo"; // Por si le da a cancelar
-        }
-    }
 
     private void actualizarMensajes() {
         List<Mensaje> ultimosMensajes = clienteService.obtenerUltimosMensajes();
