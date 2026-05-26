@@ -14,9 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ChatVentana {
-
-    // ← Cambia "ApellidosNombre" por los tuyos reales
-    private static final String TITULO_VENTANA = "ChatDAM_ApellidosNombreAlumno";
+    private static final String TITULO_VENTANA = "CHAT DAM - Sebastian Csibi & Raul Carmona";
 
     private final String nombreUsuario;
     private final ChatClienteService chatService = new ChatClienteService();
