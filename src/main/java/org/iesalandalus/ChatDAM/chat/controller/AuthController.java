@@ -17,8 +17,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = authService.validarLogin(request);
-        // Devolvemos siempre 200 — el campo "exito" indica el resultado
-        // Esto evita que un atacante distinga errores por código HTTP
         return ResponseEntity.ok(response);
     }
 }

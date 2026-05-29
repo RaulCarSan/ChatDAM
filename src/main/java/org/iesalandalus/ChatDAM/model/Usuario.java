@@ -13,9 +13,11 @@ public class Usuario {
     @Column(name = "nombre_usuario", nullable = false, unique = true)
     private String nombreUsuario;
 
-    // Se almacena el hash SHA-256 de la contraseña
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
+
+    @Column(name = "rol", nullable = false)
+    private String rol = "USUARIO";
 
     public Usuario() {}
 
@@ -24,4 +26,6 @@ public class Usuario {
     public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
 }

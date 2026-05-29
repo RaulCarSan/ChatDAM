@@ -25,7 +25,6 @@ public class CifradoUtil {
         return new String(textoDescifrado);
     }
 
-    // Hash SHA-256 para almacenar/comparar contraseñas en base de datos
     public static String hashSHA256(String texto) throws Exception {
         java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
         byte[] hash = digest.digest(texto.getBytes("UTF-8"));

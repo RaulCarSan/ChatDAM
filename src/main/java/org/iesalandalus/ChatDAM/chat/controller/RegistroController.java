@@ -17,7 +17,6 @@ public class RegistroController {
     @PostMapping("/registro")
     public ResponseEntity<RegistroResponse> registro(@RequestBody RegistroRequest request) {
         RegistroResponse response = registroService.registrarUsuario(request);
-        // Siempre 200 — el campo "exito" indica el resultado real
         return ResponseEntity.ok(response);
     }
 }

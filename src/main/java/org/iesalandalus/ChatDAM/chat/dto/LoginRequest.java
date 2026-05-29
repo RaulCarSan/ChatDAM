@@ -1,7 +1,6 @@
 package org.iesalandalus.ChatDAM.chat.dto;
 
 public class LoginRequest {
-    // Ambos campos llegan cifrados con AES desde JavaFX
     private String nombreUsuarioCifrado;
     private String passwordCifrado;
 

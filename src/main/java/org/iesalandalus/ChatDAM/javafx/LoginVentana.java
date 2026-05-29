@@ -34,7 +34,6 @@ public class LoginVentana {
         Label lblError = new Label();
         lblError.setStyle("-fx-text-fill: red;");
 
-        // --- Botón principal: Entrar ---
         Button btnLogin = new Button("Entrar");
         btnLogin.setDefaultButton(true);
         btnLogin.setMaxWidth(Double.MAX_VALUE);
@@ -43,7 +42,6 @@ public class LoginVentana {
                         "-fx-font-weight: bold; -fx-background-radius: 5px;"
         );
 
-        // --- Botón secundario: Registrarse ---
         Button btnRegistro = new Button("¿No tienes cuenta? Regístrate");
         btnRegistro.setMaxWidth(Double.MAX_VALUE);
         btnRegistro.setStyle(
@@ -55,7 +53,6 @@ public class LoginVentana {
             ventanaRegistro.mostrar(stage);
         });
 
-        // --- Acción del botón Entrar ---
         btnLogin.setOnAction(e -> {
             String usuario  = tfUsuario.getText().trim();
             String password = pfPassword.getText();
@@ -85,8 +82,7 @@ public class LoginVentana {
                             Parent root = loader.load();
 
                             ChatControlador controlador = loader.getController();
-                            controlador.setNombreUsuario(respuesta.getNombreUsuario());
-
+                            controlador.setNombreUsuario(respuesta.getNombreUsuario(), respuesta.getRol());
                             stage.setTitle("ChatDAM - " + respuesta.getNombreUsuario());
                             stage.setScene(new Scene(root));
                             stage.show();
@@ -107,7 +103,6 @@ public class LoginVentana {
             }).start();
         });
 
-        // --- Separador visual entre los dos botones ---
         Separator separador = new Separator();
         separador.setStyle("-fx-padding: 4 0 0 0;");
 

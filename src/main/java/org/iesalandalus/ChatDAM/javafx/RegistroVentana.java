@@ -15,33 +15,26 @@ public class RegistroVentana {
     public void mostrar(Stage owner) {
         Stage stage = new Stage();
         stage.setTitle("ChatDAM - Crear cuenta");
-        // Modal: bloquea la ventana de login mientras está abierta
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(owner);
 
-        // --- Título ---
         Label lblTitulo = new Label("Crear nueva cuenta");
         lblTitulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
-        // --- Usuario ---
         Label lblUsuario = new Label("Nombre de usuario:");
         TextField tfUsuario = new TextField();
         tfUsuario.setPromptText("Solo letras, sin números ni símbolos");
 
-        // --- Contraseña ---
         Label lblPassword = new Label("Contraseña (mín. 6 caracteres):");
         PasswordField pfPassword = new PasswordField();
         pfPassword.setPromptText("Introduce una contraseña");
 
-        // --- Confirmar contraseña ---
         Label lblConfirm = new Label("Confirmar contraseña:");
         PasswordField pfConfirm = new PasswordField();
         pfConfirm.setPromptText("Repite la contraseña");
 
-        // --- Mensaje de error/éxito ---
         Label lblMensaje = new Label();
 
-        // --- Botones ---
         Button btnRegistrar = new Button("Crear cuenta");
         btnRegistrar.setDefaultButton(true);
         btnRegistrar.setMaxWidth(Double.MAX_VALUE);
@@ -56,7 +49,6 @@ public class RegistroVentana {
             String password = pfPassword.getText();
             String confirm  = pfConfirm.getText();
 
-            // --- Validaciones en cliente (antes de llamar al servidor) ---
             if (usuario.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
                 mostrarMensaje(lblMensaje, "Rellena todos los campos.", false);
                 return;
@@ -81,7 +73,6 @@ public class RegistroVentana {
             btnRegistrar.setDisable(true);
             mostrarMensaje(lblMensaje, "Procesando...", true);
 
-            // Llamada en hilo separado para no bloquear la UI
             final String usuarioFinal  = usuario;
             final String passwordFinal = password;
             new Thread(() -> {
@@ -92,11 +83,9 @@ public class RegistroVentana {
                     btnRegistrar.setDisable(false);
 
                     if (respuesta != null && respuesta.isExito()) {
-                        // Registro correcto: mostrar mensaje de éxito y cerrar tras un momento
                         mostrarMensaje(lblMensaje, "✓ " + respuesta.getMensaje(), true);
                         btnRegistrar.setDisable(true);
                         btnCancelar.setText("Cerrar");
-                        // Cerrar automáticamente a los 2 segundos
                         javafx.animation.PauseTransition pausa =
                                 new javafx.animation.PauseTransition(javafx.util.Duration.seconds(2));
                         pausa.setOnFinished(ev -> stage.close());
@@ -111,7 +100,6 @@ public class RegistroVentana {
             }).start();
         });
 
-        // --- Layout ---
         VBox layout = new VBox(10,
                 lblTitulo,
                 new Separator(),
@@ -131,7 +119,6 @@ public class RegistroVentana {
         stage.show();
     }
 
-    /** Muestra el mensaje con color verde (éxito) o rojo (error). */
     private void mostrarMensaje(Label lbl, String texto, boolean exito) {
         lbl.setText(texto);
         lbl.setStyle(exito

@@ -64,7 +64,6 @@ public class ChatVentana {
         stage.setScene(new Scene(layout, 600, 450));
         stage.show();
 
-        // Cargar mensajes al abrir
         cargarMensajes();
     }
 

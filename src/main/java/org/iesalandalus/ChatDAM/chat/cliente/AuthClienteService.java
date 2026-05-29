@@ -12,7 +12,6 @@ public class AuthClienteService {
 
     public LoginResponse login(String usuario, String password) {
         try {
-            // Cifrar credenciales antes de enviarlas
             String usuarioCifrado  = CifradoUtil.cifrar(usuario);
             String passwordCifrado = CifradoUtil.cifrar(password);
 

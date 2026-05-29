@@ -33,7 +33,6 @@ public class ErrorVentana {
         Button btnSalir = new Button("Salir");
         btnSalir.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
         btnSalir.setOnAction(e -> {
-            // Cierra toda la aplicación JavaFX
             javafx.application.Platform.exit();
             System.exit(0);
         });

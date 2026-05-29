@@ -12,7 +12,6 @@ public class RegistroClienteService {
 
     public RegistroResponse registrar(String usuario, String password) {
         try {
-            // Cifrar credenciales antes de enviarlas (AES, igual que en el login)
             String usuarioCifrado  = CifradoUtil.cifrar(usuario);
             String passwordCifrado = CifradoUtil.cifrar(password);
 
